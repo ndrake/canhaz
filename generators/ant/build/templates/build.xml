@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ${COPYRIGHT} -->
+<project name="${MODULE}" default="dist" basedir=".">
+    <description>
+        Build file for ${MODULE}
+    </description>
+
+    <!-- Load user specific properties -->
+    <echo message="using properties for user.name: ${user.name} loading prop file: properties/${user.name}.properties"/>
+    <property file="properties/${user.name}.properties"/>
+    
+    <!-- Load default properties -->
+    <import file="build-properties.xml"/>
+    
+    <property name="src" location="src"/>
+    <property name="build" location="build"/>
+    <property name="dist"  location="dist"/>
+    <property name="lib"   location="lib"/>
+
+    <target name="help" description="Ant build help.">
+        <exec dir="${basedir}" executable="ant">
+            <arg line="-projecthelp"/>
+        </exec>
+    </target>
+    
+    <target name="clean" description="Clean the build.">
+        <delete dir="${build}" failonerror="false"/>
+        <delete dir="${dist}" failonerror="false"/>
+    </target>
+
+    <target name="init">
+        <tstamp/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>        
+    </target>
+
+    <target name="compile" description="Compiles all of the code." depends="init">
+        <javac srcdir="${src}"
+               destdir="${build}"
+               debug="${javac.debug}"
+               debuglevel="${javac.debug.level}"
+               deprecation="${javac.deprecation}"
+               optimize="${javac.optimize}">
+            <classpath refid="build.classpath"/>
+        </javac>
+    </target>
+    
+    <target name="dist" depends="compile"
+        description="generate the distribution" >
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist}/lib"/>
+
+        <!-- Put everything in ${build} into the MyProject-${DSTAMP}.jar file -->
+        <jar jarfile="${dist}/${MODULE}-${DSTAMP}.jar" basedir="${build}"/>
+    </target>
+
+</project>

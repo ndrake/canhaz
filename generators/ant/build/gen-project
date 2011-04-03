@@ -1,0 +1,25 @@
+#!/bin/sh
+
+#
+# canhaz Ant-based Java project
+# Generates new project dir and basic build.xml
+#
+
+GIT=`which git`
+
+msg "MODULE_BASE: ${MODULE_BASE}"
+msg "MODULE: ${MODULE}"
+msg "HOME: ${HOME}"
+
+log_file "${MODULE_BASE}/${MODULE}/"
+
+mkdir -p "$MODULE_BASE/${MODULE}"
+mkdir -p "$MODULE_BASE/${MODULE}/src"
+mkdir -p "$MODULE_BASE/${MODULE}/lib"
+
+pushd "$MODULE_BASE" >> /dev/null
+
+template "$MY_DIR/templates/build.xml" > "${MODULE}/build.xml"
+template "$MY_DIR/templates/build-properties.xml" > "${MODULE}/build-properties.xml"
+
+popd >> /dev/null
